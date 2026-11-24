@@ -10,13 +10,11 @@ import net.minecraft.client.gui.DrawContext;
 
 public class ClickGuiManager {
     private static ClickGuiManager INSTANCE;
-    
     private boolean isOpen = false;
     private GuiAnimation currentAnimation;
     private GuiSettings guiSettings;
     private GuiRenderer guiRenderer;
     private FontRenderer fontRenderer;
-    
     private ClickGuiPanel[] panels;
     private int currentPanelIndex = 0;
     
@@ -74,7 +72,6 @@ public class ClickGuiManager {
         for (int i = 0; i < panels.length; i++) {
             int categoryY = topY + 30 + (i * 50);
             boolean isSelected = i == currentPanelIndex;
-            
             guiRenderer.renderCategory(context, centerX - panelSize / 2 + 20, categoryY, 
                                       panels[i].getName(), isSelected, progress);
         }
