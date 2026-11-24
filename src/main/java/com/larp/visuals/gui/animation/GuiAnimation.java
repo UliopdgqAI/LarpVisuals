@@ -20,9 +20,9 @@ public class GuiAnimation {
     }
     
     public void update() {
-        if (isForward) {
+        if (isForward && progress < 1f) {
             progress = Math.min(1f, progress + speed);
-        } else {
+        } else if (!isForward && progress > 0f) {
             progress = Math.max(0f, progress - speed);
         }
     }
