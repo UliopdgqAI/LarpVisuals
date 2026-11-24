@@ -1,0 +1,27 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# macOS
+.DS_Store
+
+# Java
+*.class
+*.jar
+
+# Fabric
+run/
+libs/
+.mixin.out/
+
+# Environment
+.env
+.env.local
