@@ -17,7 +17,7 @@ public class KeyBindings {
     
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (OPEN_GUI.wasPressed()) {
+            while (OPEN_GUI.wasPressed()) {
                 ClickGuiManager.getInstance().toggleGui();
             }
         });
