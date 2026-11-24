@@ -1,59 +1,29 @@
 plugins {
     id("fabric-loom") version "1.8.11"
-    id("maven-publish")
 }
 
-version = project.property("mod_version") as String
-group = project.property("maven_group") as String
+version = "1.0.0"
+group = "com.larp.visuals"
+base { archivesName = "larpvisuals" }
 
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.fabricmc.net/") }
-    maven { url = uri("https://maven.architectury.dev/") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    
+    minecraft("com.mojang:minecraft:1.21.1")
     mappings(loom.layered {
         officialMojangMappings()
     })
-    
-    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}")
+    modImplementation("net.fabricmc:fabric-loader:0.15.11")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1")
 }
 
-tasks {
-    java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-        
-        withSourcesJar()
-    }
-    
-    jar {
-        from("LICENSE") {
-            rename { "${it}_${project.base.archivesName}" }
-        }
-    }
-    
-    processResources {
-        inputs.property("version", project.version)
-        filesMatching("fabric.mod.json") {
-            expand(mapOf("version" to project.version))
-        }
-    }
+tasks.withType<JavaCompile> {
+    options.release = 21
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-        }
-    }
-    
-    repositories {
-        mavenLocal()
-    }
+tasks.jar {
+    from("LICENSE")
 }
