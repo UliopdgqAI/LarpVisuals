@@ -1,6 +1,5 @@
 package com.larp.visuals.gui.renderer;
 
-import com.larp.visuals.gui.util.RenderUtil;
 import net.minecraft.client.gui.DrawContext;
 
 public class GuiRenderer {
@@ -19,11 +18,8 @@ public class GuiRenderer {
         
         int colorWithAlpha = (alpha << 24) | (color & 0xFFFFFF);
         
-        RenderUtil.fillRoundedRect(context, x, y, x + panelSize, y + panelSize, 
-                                  12, colorWithAlpha);
-        
-        RenderUtil.drawBorder(context, x, y, x + panelSize, y + panelSize, 
-                             2, 0xFFFFFFFF, 12);
+        fillRoundedRect(context, x, y, x + panelSize, y + panelSize, 12, colorWithAlpha);
+        drawBorder(context, x, y, x + panelSize, y + panelSize, 2, 0xFFFFFFFF, 12);
     }
     
     public void renderCategory(DrawContext context, int x, int y, String name, 
@@ -32,7 +28,23 @@ public class GuiRenderer {
         int alpha = (int)(255 * easeOutCubic(progress));
         int colorWithAlpha = (alpha << 24) | (bgColor & 0xFFFFFF);
         
-        RenderUtil.fillRoundedRect(context, x, y, x + 160, y + 40, 8, colorWithAlpha);
+        fillRoundedRect(context, x, y, x + 160, y + 40, 8, colorWithAlpha);
+    }
+    
+    private void fillRoundedRect(DrawContext context, int x1, int y1, int x2, int y2, 
+                                 int radius, int color) {
+        context.fill(x1 + radius, y1, x2 - radius, y2, color);
+        context.fill(x1, y1 + radius, x2, y2 - radius, color);
+    }
+    
+    private void drawBorder(DrawContext context, int x1, int y1, int x2, int y2, 
+                           int thickness, int color, int radius) {
+        for (int i = 0; i < thickness; i++) {
+            context.drawHorizontalLine(x1 + radius, x2 - radius, y1 + i, color);
+            context.drawHorizontalLine(x1 + radius, x2 - radius, y2 - i, color);
+            context.drawVerticalLine(x1 + i, y1 + radius, y2 - radius, color);
+            context.drawVerticalLine(x2 - i, y1 + radius, y2 - radius, color);
+        }
     }
     
     private float easeOutCubic(float progress) {
