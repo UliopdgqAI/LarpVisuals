@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "larpvisuals",
+  "version": "1.0.0",
+  "name": "LarpVisuals",
+  "description": "Custom visual enhancements for Minecraft Fabric",
+  "authors": ["UliopdgqAI"],
+  "contact": {
+    "homepage": "https://github.com/UliopdgqAI/LarpVisuals",
+    "issues": "https://github.com/UliopdgqAI/LarpVisuals/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/larpvisuals/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.larp.visuals.LarpVisualsMod"]
+  },
+  "mixins": [
+    "larpvisuals.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.21.1",
+    "java": ">=21"
+  }
+}
