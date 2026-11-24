@@ -3,64 +3,56 @@ plugins {
     id("maven-publish")
 }
 
-repositories {
-    maven { url = uri("https://maven.fabricmc.net/") }
-    maven { url = uri("https://maven.architectury.dev/") }
-    maven { url = uri("https://maven.minecraftforge.net/") }
-}
-
-base {
-    archivesName.set(property("archives_base_name").toString())
-}
-
-version = property("mod_version").toString()
-group = property("maven_group").toString()
+version = project.property("mod_version") as String
+group = project.property("maven_group") as String
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://maven.fabricmc.net/") }
+    maven { url = uri("https://maven.architectury.dev/") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
+    
     mappings(loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${property("minecraft_version")}:2024.07.28@zip")
     })
     
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
+    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}")
 }
 
 tasks {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+        
+        withSourcesJar()
+    }
+    
+    jar {
+        from("LICENSE") {
+            rename { "${it}_${project.base.archivesName}" }
+        }
+    }
+    
     processResources {
         inputs.property("version", project.version)
         filesMatching("fabric.mod.json") {
-            expand("version" to project.version)
+            expand(mapOf("version" to project.version))
         }
-    }
-
-    jar {
-        from("LICENSE") {
-            rename { "${it}_${project.base.archivesName.get()}" }
-        }
-    }
-
-    java {
-        withSourcesJar()
     }
 }
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            artifact(tasks.remapJar)
-            artifact(tasks.sourcesJar) {
-                classifier = "sources"
-            }
+            from(components["java"])
         }
     }
-
+    
     repositories {
         mavenLocal()
     }
